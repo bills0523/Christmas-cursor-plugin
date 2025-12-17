@@ -4,6 +4,10 @@
   "description": "A festive sidebar that tracks keystrokes and coding time while Santa tosses gifts.",
   "version": "0.0.1",
   "publisher": "workshop",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bills0523/Christmas-cursor-plugin.git"
+  },
   "engines": {
     "vscode": "^1.84.0"
   },
@@ -26,13 +30,22 @@
       ]
     }
   },
+  "files": [
+    "out/**",
+    "media/**",
+    "README.md",
+    "package.json"
+  ],
   "scripts": {
+    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p .",
-    "watch": "tsc -w -p ."
+    "watch": "tsc -w -p .",
+    "package": "npx @vscode/vsce package --no-dependencies"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/vscode": "^1.107.0",
+    "@vscode/vsce": "^3.5.0",
     "typescript": "^5.3.0"
   }
 }
