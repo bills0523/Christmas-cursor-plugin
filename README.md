@@ -35,9 +35,24 @@ This repo is set up to run the extension locally via the VS Code Extension Devel
 - **Session Time**: MM:SS since the Extension Host session started
 - **IDE Time**: total seconds persisted across Extension Host restarts
 
+## Install for end users (VSIX)
+If you want others to use it without building/running the debugger, package it as a `.vsix` and install it.
+
+1. Create the `.vsix` file
+   ```bash
+   npm install
+   npm run package
+   ```
+   This generates a file like `santas-metrics-sleigh-0.0.1.vsix`.
+2. Install the `.vsix` in VS Code / Cursor
+   - Open Command Palette → `Extensions: Install from VSIX...`
+   - Select the generated `.vsix`
+   - Reload the window when prompted
+
 ## Scripts
 - `npm run compile` — one-time TypeScript build to `out/`.
 - `npm run watch` — watch mode build for development.
+- `npm run package` — creates an installable `.vsix` (VS Code/Cursor can install it directly).
 
 ## How it works
 - `src/extension.ts` registers the webview view provider, tracks keystrokes, and ticks session/total timers (persisted via `context.globalState`).
