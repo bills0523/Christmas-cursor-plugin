@@ -15,20 +15,12 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "santaMetricsContainer",
-          "title": "Santa's Metrics",
-          "icon": "media/santa-icon.svg"
-        }
-      ]
-    },
     "views": {
-      "santaMetricsContainer": [
+      "explorer": [
         {
           "id": "santaMetricsView",
-          "name": "Santa's Metrics Sleigh"
+          "name": "Santa's Metrics Sleigh",
+          "icon": "media/santa-icon.svg"
         }
       ]
     }
