@@ -98,6 +98,7 @@ export class SantaProvider implements vscode.WebviewViewProvider {
               font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
               color: var(--text-primary);
               background: radial-gradient(circle at 10% 20%, #fff8f1 0%, #ffe8d6 25%, #fffdf8 60%);
+              zoom: 0.85;
             }
             .scene {
               display: grid;
