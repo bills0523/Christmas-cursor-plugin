@@ -81,8 +81,10 @@ export class SantaProvider implements vscode.WebviewViewProvider {
           <title>Santa's Metrics Sleigh</title>
           <style>
             :root {
-              --sled-bg: linear-gradient(135deg, #ffe8d6, #fff5ec);
-              --sled-border: #d33c3c;
+              --tree-fill: #d7f7e8;
+              --tree-fill-2: #effff7;
+              --tree-border: #2e8b57;
+              --tree-trunk: #b07a4a;
               --text-primary: #1e1e1e;
               --accent: #c70039;
               --frost: rgba(255, 255, 255, 0.55);
@@ -113,7 +115,7 @@ export class SantaProvider implements vscode.WebviewViewProvider {
               align-items: center;
               justify-content: center;
               background: linear-gradient(180deg, #fdf3ec 0%, #ffe2d1 100%);
-              border: 2px dashed var(--sled-border);
+              border: 2px dashed #d33c3c;
               border-radius: 18px;
               box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
             }
@@ -151,37 +153,68 @@ export class SantaProvider implements vscode.WebviewViewProvider {
               gap: 12px;
               width: 100%;
             }
-            .sled {
-              background: var(--sled-bg);
-              border: 2px solid var(--sled-border);
-              border-radius: 16px;
-              padding: 12px 14px;
-              box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+            .tree {
               position: relative;
-              overflow: hidden;
+              height: 150px;
+              padding-top: 18px;
+              display: grid;
+              place-items: center;
+              filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.10));
             }
-            .sled::after {
-              content: '';
+            .tree::before {
+              content: "";
               position: absolute;
               inset: 0;
-              background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), transparent 55%);
-              pointer-events: none;
+              background: linear-gradient(180deg, var(--tree-fill) 0%, var(--tree-fill-2) 100%);
+              border: 2px solid var(--tree-border);
+              border-radius: 16px;
+              clip-path: polygon(50% 4%, 94% 42%, 82% 42%, 98% 74%, 72% 74%, 86% 96%, 14% 96%, 28% 74%, 2% 74%, 18% 42%, 6% 42%);
             }
-            .sled h3 {
+            .tree::after {
+              content: "";
+              position: absolute;
+              width: 34px;
+              height: 22px;
+              left: 50%;
+              bottom: 10px;
+              transform: translateX(-50%);
+              background: linear-gradient(180deg, #d8b08c 0%, var(--tree-trunk) 100%);
+              border: 2px solid rgba(70, 40, 20, 0.25);
+              border-radius: 6px;
+            }
+            .tree .lights {
+              position: absolute;
+              inset: 0;
+              pointer-events: none;
+              opacity: 0.9;
+              mix-blend-mode: multiply;
+              filter: saturate(1.05);
+              background:
+                radial-gradient(circle at 28% 45%, rgba(255, 204, 102, 0.85) 0 4px, transparent 6px),
+                radial-gradient(circle at 58% 34%, rgba(255, 140, 180, 0.75) 0 4px, transparent 6px),
+                radial-gradient(circle at 72% 58%, rgba(129, 220, 255, 0.75) 0 4px, transparent 6px),
+                radial-gradient(circle at 40% 70%, rgba(173, 255, 156, 0.75) 0 4px, transparent 6px),
+                radial-gradient(circle at 56% 82%, rgba(255, 236, 156, 0.75) 0 4px, transparent 6px);
+              clip-path: polygon(50% 4%, 94% 42%, 82% 42%, 98% 74%, 72% 74%, 86% 96%, 14% 96%, 28% 74%, 2% 74%, 18% 42%, 6% 42%);
+            }
+            .tree .content {
+              position: relative;
+              z-index: 1;
+              text-align: center;
+              width: 100%;
+              padding: 0 12px 28px;
+              color: var(--text-primary);
+            }
+            .tree h3 {
               margin: 0 0 8px;
               font-size: 14px;
               letter-spacing: 0.5px;
               text-transform: uppercase;
               color: var(--accent);
             }
-            .sled .value {
+            .tree .value {
               font-size: 28px;
               font-weight: 700;
-            }
-            .sled .hint {
-              font-size: 12px;
-              color: #4a4a4a;
-              opacity: 0.8;
             }
             .rope {
               position: absolute;
@@ -214,20 +247,26 @@ export class SantaProvider implements vscode.WebviewViewProvider {
             </div>
             <div class="rope" aria-hidden="true"></div>
             <div class="sleds">
-              <div class="sled">
-                <h3>Sled 1 · Keystrokes</h3>
-                <div class="value" id="keystrokes">0</div>
-                <div class="hint">Every edit makes Santa toss a gift.</div>
+              <div class="tree">
+                <div class="lights" aria-hidden="true"></div>
+                <div class="content">
+                  <h3>Keystrokes</h3>
+                  <div class="value" id="keystrokes">0</div>
+                </div>
               </div>
-              <div class="sled">
-                <h3>Sled 2 · Session Time</h3>
-                <div class="value" id="session">00:00</div>
-                <div class="hint">Current session ticking live.</div>
+              <div class="tree">
+                <div class="lights" aria-hidden="true"></div>
+                <div class="content">
+                  <h3>Session Time</h3>
+                  <div class="value" id="session">00:00</div>
+                </div>
               </div>
-              <div class="sled">
-                <h3>Sled 3 · Total IDE Time</h3>
-                <div class="value" id="total">00:00</div>
-                <div class="hint">Persisted across reloads.</div>
+              <div class="tree">
+                <div class="lights" aria-hidden="true"></div>
+                <div class="content">
+                  <h3>IDE Time</h3>
+                  <div class="value" id="total">00:00</div>
+                </div>
               </div>
             </div>
           </div>
