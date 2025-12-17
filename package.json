@@ -20,6 +20,7 @@
         {
           "id": "santaMetricsView",
           "name": "Santa's Metrics Sleigh",
+          "type": "webview",
           "icon": "media/santa-icon.svg"
         }
       ]
