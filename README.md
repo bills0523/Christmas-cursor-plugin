@@ -9,19 +9,31 @@ Festive VS Code sidebar that tracks your keystrokes and coding time while Santa 
 - Total IDE time persisted in `globalState` across reloads.
 - No external assets required; uses inline emoji and CSS.
 
-## Getting started
+## Using the extension (local)
+This repo is set up to run the extension locally via the VS Code Extension Development Host.
+
 1. Install dependencies
    ```bash
    npm install
    ```
-2. Build (emits to `out/`)
+2. Build the extension
    ```bash
    npm run compile
    ```
-3. Launch in VS Code
-   - Press `F5` to run the extension in a new Extension Development Host, or run `npm run watch` and start debugging.
-4. Open the view
-   - In the Explorer sidebar, open **Santa's Metrics Sleigh** (container: **Santa's Metrics**).
+   (or run `npm run watch` during development)
+3. Run the extension
+   - Open this folder in VS Code
+   - Go to **Run and Debug**
+   - Select `Run Extension` and start it (or press `F5`)
+4. Open the UI
+   - In the **Extension Development Host** window, open the **Explorer** sidebar
+   - Look for **Santa's Metrics Sleigh**
+   - Type in any file to see 🎁 fall from the top while metrics update
+
+## What you’ll see
+- **Keystrokes**: increments on every `onDidChangeTextDocument` event
+- **Session Time**: MM:SS since the Extension Host session started
+- **IDE Time**: total seconds persisted across Extension Host restarts
 
 ## Scripts
 - `npm run compile` — one-time TypeScript build to `out/`.
@@ -30,6 +42,11 @@ Festive VS Code sidebar that tracks your keystrokes and coding time while Santa 
 ## How it works
 - `src/extension.ts` registers the webview view provider, tracks keystrokes, and ticks session/total timers (persisted via `context.globalState`).
 - `src/SantaProvider.ts` renders the webview UI, listens for messages, updates the sled values, and triggers the gift arc animation.
+
+## Troubleshooting
+- View not showing: make sure you’re in the **Extension Development Host** window, then run `Developer: Reload Window`.
+- Build errors: run `npm run compile` and fix any TypeScript errors it prints.
+- No counters updating: click inside an editor and type to trigger document change events.
 
 ## Requirements
 - VS Code `^1.84.0`
