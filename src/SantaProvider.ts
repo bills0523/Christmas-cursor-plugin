@@ -124,28 +124,27 @@ export class SantaProvider implements vscode.WebviewViewProvider {
               filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
             }
             .gift-zone {
-              position: absolute;
-              left: 10px;
-              top: 10px;
-              width: 120px;
-              height: 120px;
-              overflow: visible;
+              position: fixed;
+              inset: 0;
+              overflow: hidden;
               pointer-events: none;
+              z-index: 999;
             }
             .gift {
               position: absolute;
               left: 0;
-              top: 60px;
+              top: -24px;
               font-size: 20px;
               opacity: 0;
+              will-change: transform, opacity;
             }
             .throw-gift {
-              animation: gift-arc 1s ease-out forwards;
+              animation: gift-fall var(--dur, 1.6s) ease-in forwards;
             }
-            @keyframes gift-arc {
-              0% { transform: translate(0, 0) scale(0.8) rotate(-5deg); opacity: 1; }
-              50% { transform: translate(70px, -50px) scale(1) rotate(8deg); opacity: 1; }
-              100% { transform: translate(130px, -10px) scale(0.9) rotate(2deg); opacity: 0; }
+            @keyframes gift-fall {
+              0% { transform: translate(0, 0) rotate(0deg) scale(0.95); opacity: 1; }
+              70% { opacity: 1; }
+              100% { transform: translate(var(--dx, 0px), 320px) rotate(var(--rot, 140deg)) scale(0.95); opacity: 0; }
             }
             .sleds {
               display: grid;
@@ -242,7 +241,6 @@ export class SantaProvider implements vscode.WebviewViewProvider {
         <body>
           <div class="scene">
             <div class="santa">
-              <div class="gift-zone" id="gift-zone"></div>
               <span class="santa-emoji" aria-label="Santa">🎅</span>
             </div>
             <div class="rope" aria-hidden="true"></div>
@@ -270,6 +268,7 @@ export class SantaProvider implements vscode.WebviewViewProvider {
               </div>
             </div>
           </div>
+          <div class="gift-zone" id="gift-zone" aria-hidden="true"></div>
           <script nonce="${nonce}">
             const $ = (id) => document.getElementById(id);
             const keystrokesEl = $('keystrokes');
@@ -299,6 +298,15 @@ export class SantaProvider implements vscode.WebviewViewProvider {
               const gift = document.createElement('span');
               gift.className = 'gift throw-gift';
               gift.textContent = '🎁';
+              const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+              const startX = Math.floor(Math.random() * Math.max(1, viewportWidth - 24));
+              const drift = Math.floor((Math.random() - 0.5) * 140); // -70..70px
+              const duration = 1.2 + Math.random() * 1.2; // 1.2..2.4s
+              const rotation = Math.floor((Math.random() - 0.5) * 420); // -210..210deg
+              gift.style.left = startX + 'px';
+              gift.style.setProperty('--dx', drift + 'px');
+              gift.style.setProperty('--dur', duration + 's');
+              gift.style.setProperty('--rot', rotation + 'deg');
               giftZone.appendChild(gift);
               gift.addEventListener('animationend', () => gift.remove());
             }
